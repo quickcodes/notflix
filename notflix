@@ -1,0 +1,8 @@
+name=$(echo "" | dmenu -p "ENTER NAMEA: ")
+name=(${name// /%20})
+movie=$(echo "" | curl -s "https://thepiratebay.party/search/$name/1/99/0" | grep -Eo "(http|https)://thepiratebay.party/torrent/[a-zA-Z0-9./?=_%:-]*" | dmenu -l 15)
+echo "$movie"
+magnet=$(curl -s "$movie" | grep -Po "magnet:\?xt=urn:btih:[a-zA-Z0-9]*" | head -1)
+notify-send "🎥 Enjoy Watching ☺️ "
+webtorrent "$magnet" --mpv 
+
