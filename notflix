@@ -3,6 +3,14 @@ name=(${name// /%20})
 movie=$(echo "" | curl -s "https://thepiratebay.party/search/$name/1/99/0" | grep -Eo "(http|https)://thepiratebay.party/torrent/[a-zA-Z0-9./?=_%:-]*" | dmenu -l 15)
 echo "$movie"
 magnet=$(curl -s "$movie" | grep -Po "magnet:\?xt=urn:btih:[a-zA-Z0-9]*" | head -1)
-notify-send "🎥 Enjoy Watching ☺️ "
-webtorrent "$magnet" --mpv 
+echo "PRESS 1 to download only or press any key"
+read num
+if (($num == 1))
+then
+	notify-send "🎥 Downloading... ☺️ "
+	webtorrent download "$magnet"
+else
+	notify-send "🎥 Enjoy Watching ☺️ "
+	webtorrent "$magnet" --mpv 
+fi
 
