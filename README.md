@@ -12,7 +12,7 @@
 cURL **notflix** to your **$PATH** and give execute permissions.
 
 ```sh
-$ sudo curl -sL "https://raw.githubusercontent.com/Bugswriter/notflix/master/notflix" -o /usr/local/bin/notflix
+$ sudo curl -sL "https://raw.githubusercontent.com/quickcodes/notflix/blob/main/notflix" -o /usr/local/bin/notflix
 $ sudo chmod +x /usr/local/bin/notflix
 ```
 - To update, just do `curl` again, no need to `chmod` anymore.
