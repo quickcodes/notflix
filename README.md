@@ -6,9 +6,12 @@
 
 ## Requirements
 
-* [npm](https://www.npmjs.com/) - The tool needed to install webtorrent. `sudo apt install npm` or `sudo pacman -S npm` if you are using an Arch based distro.
-* [webtorrent](https://webtorrent.io/) - A tool to stream torrent. The tool that makes this possible. `sudo npm install webtorrent-cli -g`
-* [mpv](https://mpv.io/) - If you don't know about mpv, you are probably new to linux. A very powerful video player. `sudo apt install mpv` or `sudo pacman -S mpv` if you are using an Arch based distro.
+* [npm](https://www.npmjs.com/) - The tool needed to install webtorrent.
+`sudo apt install npm` or `sudo pacman -S npm` if you are using an Arch based distro to install.
+* [webtorrent](https://webtorrent.io/) - A tool to stream torrent. The tool that makes this possible.
+`sudo npm install webtorrent-cli -g` to install.
+* [mpv](https://mpv.io/) - If you don't know about mpv, you are probably new to linux. A very powerful video player.
+`sudo apt install mpv` or `sudo pacman -S mpv` if you are using an Arch based distro to install.
 
 ## Installation
 
