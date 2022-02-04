@@ -1,6 +1,6 @@
 <h1 align="center">NOTFLIX for noobs</h1>
-<h2 align="center">A fork of notflix by [quickcodes](https://github.com/quickcodes)</h2>
-<h2 align="center">Watch almost any content available on internet for free as the original but with some quality of life improvements such as automatic dependency installation</h2>
+<h2 align="center">A fork of notflix by [quickcodes](https://github.com/quickcodes/) </h2>
+<h3 align="center">Watch almost any content available on internet for free as the original but with some quality of life improvements such as automatic dependency installation</h3>
 
 
 
