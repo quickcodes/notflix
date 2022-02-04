@@ -1,16 +1,84 @@
-name=$(echo "" | dmenu -p "ENTER NAMEA: ")
+pkgmanagersearch=" "       #just in case
+pkgmanagerinstall=" "
+if [ "$(ls /usr/bin | egrep '(^| )apt( |$)' | wc -l)" != "0" ];
+then
+    pkgmanagersearch="apt list --installed"
+    pkgmanagerinstall="sudo apt install"
+elif [ "$(ls /usr/bin | egrep '(^| )pacman( |$)' | wc -l)" != "0" ];
+then
+    pkgmanagersearch="pacman -Q"
+    pkgmanagerinstall="sudo pacman -S"
+fi
+if  [[ "$pkgmanagersearch" == " " ]];
+then
+    echo "Sorry. We do not support your package manager. So we can't install dependencies automatically. You will have to install them yourself. Continue anyways? [y/n]"
+    read inp
+    if [[ "$inp" != "y" ]];
+    then
+        exit
+    fi
+fi
+is_webtorrent_installed=$(npm ls -g | grep webtorrent | wc -l)
+is_mpv_installed=$($pkgmanagersearch | grep mpv | wc -l)
+is_npm_installed=$($pkgmanagersearch | grep npm | wc -l)
+if (( $is_npm_installed == 0 ))
+then
+    echo "Found unmet dependency \"npm\". You may be asked to give a password for administrator privelages for your package manager to install npm. Press \"y\" when prompted to install the dependency."
+    exec $pkgmanagerinstall npm
+fi
+if (( $is_webtorrent_installed == 0 ))
+then
+    echo "Found unmet dependency \"webtorrent\". You may be asked to give a password for administrator privelages for your package manager to install npm. Press \"y\" when prompted to install the dependency."
+    sudo npm install -g webtorrent-cli
+fi
+if (( $is_mpv_installed == 0 ))
+then
+    echo "Found unmet dependency \"mpv\". You may be asked to give a password for administrator privelages for your package manager to install npm. Press \"y\" when prompted to install the dependency."
+    exec $pkgmanagerinstall mpv
+fi
+
+#-------------------------finding and sellecting movie-------------------------
+
+#name=$(echo "" | dmenu -p "ENTER NAMEA: ")
+echo "ENTER NAME:"
+read name
 name=(${name// /%20})
-movie=$(echo "" | curl -s "https://thepiratebay.party/search/$name/1/99/0" | grep -Eo "(http|https)://thepiratebay.party/torrent/[a-zA-Z0-9./?=_%:-]*" | dmenu -l 15)
-echo "$movie"
+#movie=$(echo "" | curl -s "https://thepiratebay.party/search/$name/1/99/0" | grep -Eo "(http|https)://thepiratebay.party/torrent/[a-zA-Z0-9./?=_%:-]*")
+moviearrayraw=$(curl -s "https://thepiratebay.party/search/$name/1/99/0" | grep -Eo "(http|https)://thepiratebay.party/torrent/[a-zA-Z0-9./?=_%:-]*")
+
+#breaking the raw string to the array
+moviearray=($(echo $moviearrayraw ))
+until [ $inp -le ${#moviearray[@]} ] && [ $inp -gt 0 ]; do
+	echo "Please sellect from the following ${#moviearray[@]} movies:"
+    for ((i=0; i<${#moviearray[@]}; i++))
+    do
+        let num=$i+1
+        echo "$num.${moviearray[$i]}"
+    done
+    read inp
+    if [ $inp -gt ${#moviearray[@]} ] && [ $inp -le 0 ];
+    then
+        echo "Invalid input $inp. Please use something in range of 1 to ${#moviearray[@]}"
+    fi
+done
+
+let inp=$inp-1
+movie="${moviearray[$inp]}"
+
+echo "Sellected $movie"
 magnet=$(curl -s "$movie" | grep -Po "magnet:\?xt=urn:btih:[a-zA-Z0-9]*" | head -1)
+
+#-------------------------playing the sellected movie-------------------------
+
 echo "PRESS 1 to download only or press any key"
 read num
 if (($num == 1))
 then
-	notify-send "🎥 Downloading... ☺️ "
-	webtorrent download "$magnet"
+    #notify-send "🎥 Downloading... ☺️ "
+    echo "🎥 Downloading... ☺️ "
+    webtorrent download "$magnet"
 else
-	notify-send "🎥 Enjoy Watching ☺️ "
-	webtorrent "$magnet" --mpv 
+    #notify-send "🎥 Enjoy Watching ☺️ "
+    echo "🎥 Enjoy Watching ☺️ "
+    webtorrent "$magnet" --mpv
 fi
-
